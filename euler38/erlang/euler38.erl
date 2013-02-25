@@ -1,6 +1,6 @@
 -module(euler38).
 
--export([solve/0, list_to_nr/1]).
+-export([solve/0]).
 
 list_to_nr(NrList) ->
     lists:foldl(fun(Digit, Acc) -> Digit + 10 * Acc end, 0, NrList).
