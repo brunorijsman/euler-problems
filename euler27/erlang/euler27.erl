@@ -23,8 +23,6 @@ range_fold(_Fun, Acc0, Start, End) when Start > End ->
 range_fold(Fun, Acc0, Start, End) ->
     range_fold(Fun, Fun(Start, Acc0), Start + 1, End).
 
-
-
 max_n_prime_for_a_b(A, B) ->
     max_n_prime_for_a_b(A, B, 1).
 
