@@ -12,3 +12,6 @@ fi
 
 echo "Removing all .beam files..."
 find . -name \*.beam | xargs rm
+
+echo "Removing all emacs backup files..."
+find . -name \*~ | xargs rm
