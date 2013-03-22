@@ -1,6 +1,8 @@
 -module(pandigital).
 
--export([is/1, all/1]).
+-export([is/1,
+         fold/3, 
+         all/1]).
 
 -include_lib("eunit/include/eunit.hrl").
 
@@ -8,8 +10,14 @@ is(Nr) ->
   NrList = number:to_list(Nr),
   NrList == lists:reverse(NrList).
 
+fold(Fun, Acc0, Nr) ->
+  Digits1ToNr = lists:seq(1, Nr),
+  ApplyFun = fun(NrList, Acc) -> Fun(number:from_list(NrList), Acc) end,
+  permutations:fold(ApplyFun, Acc0, Digits1ToNr).
+
 all(Nr) ->
-  lists:map(fun number:from_list/1, permutations:all(lists:seq(1, Nr))).
+  Digits1ToNr = lists:seq(1, Nr),
+  lists:map(fun number:from_list/1, permutations:all(Digits1ToNr)).
 
 is_test() ->
   ?assert(is(0)),
@@ -26,6 +34,10 @@ is_test() ->
   ?assertNot(is(12329)),
   ?assertNot(is(1231)),
   ?assertNot(is(1291)).
+
+fold_test() ->
+  SumFun = fun(Pandigital, Sum) -> Sum + Pandigital end,
+  ?assertEqual(1332, fold(SumFun, 0, 3)). 
 
 all_test() ->
   ?assertEqual([1], all(1)),

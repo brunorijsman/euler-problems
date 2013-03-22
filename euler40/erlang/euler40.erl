@@ -1,6 +1,6 @@
 -module(euler40).
 
--export([solve/0, nr_to_rev_list/1]).
+-export([solve/0]).
 
 nr_to_rev_list(Nr) when Nr == 0 ->
   [];

@@ -1,17 +1,16 @@
 #!/bin/sh
 
-## Make sure we are in the right directory
-
 directory=${PWD##*/}
 if [ $directory != "euler-problems" ]; then
    echo "You must be in the euler-problems directory to execute clean."
    exit 1
 fi
 
-## Clean up all .beam files
-
 echo "Removing all .beam files..."
 find . -name \*.beam | xargs rm
 
 echo "Removing all emacs backup files..."
 find . -name \*~ | xargs rm
+
+echo "Removing all erl_crash.dump files..."
+find . -name erl_crash.dump | xargs rm
