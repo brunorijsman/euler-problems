@@ -60,6 +60,18 @@ all_truncations_right(0, Truncations) ->
 all_truncations_right(Nr, Truncations) ->
   all_truncations_right(truncate_right(Nr), [Nr | Truncations]).
 
+is_square(N) ->
+  Root = trunc(math:sqrt(N)),
+  Root * Root == N.
+
+% Is N a triangle number?
+% N is a triangle number if N = K*(K+1)/2 for some integer K.
+% Given an N and solving for K you get K = (sqrt(8N+1)-1)/2.
+% N is a triangle number if K is integer which is true if 8N+1 is square.
+%
+is_triangle(N) ->
+  is_square(8*N+1).
+
 to_list_test() ->
   ?assertEqual([0], to_list(0)),
   ?assertEqual([1], to_list(1)),
@@ -112,3 +124,21 @@ all_truncations_right_test() ->
   ?assertEqual([8, 80, 807, 8070, 80701], lists:sort(all_truncations_right(80701))),
   ?assertEqual([3], lists:sort(all_truncations_right(3))),
   ?assertEqual([0], lists:sort(all_truncations_right(0))).
+
+is_square_test() ->
+  ?assert(is_square(1)),
+  ?assert(is_square(4)),
+  ?assert(is_square(9)),
+  ?assert(is_square(16)),
+  ?assertNot(is_square(2)),
+  ?assertNot(is_square(10)).
+
+is_triangle_test() ->
+  ?assert(is_triangle(1)),
+  ?assert(is_triangle(3)),
+  ?assert(is_triangle(6)),
+  ?assert(is_triangle(10)),
+  ?assert(is_triangle(55)),
+  ?assertNot(is_triangle(2)),
+  ?assertNot(is_triangle(16)),
+  ?assertNot(is_triangle(56)).
