@@ -6,7 +6,10 @@
          truncate_left/1,
          all_truncations_left/1,
          truncate_right/1,
-         all_truncations_right/1]).
+         all_truncations_right/1,
+         is_triangle/1,
+         is_pentagonal/1,
+         is_hexagonal/1]).
 
 -include_lib("eunit/include/eunit.hrl").
 
@@ -67,10 +70,17 @@ is_square(N) ->
 % Is N a triangle number?
 % N is a triangle number if N = K*(K+1)/2 for some integer K.
 % Given an N and solving for K you get K = (sqrt(8N+1)-1)/2.
-% N is a triangle number if K is integer which is true if 8N+1 is square.
+% N is a triangle number if K is integer which is true if 8N+1 is square
+% andalso sqrt(8N+1)-1 is a multiple of 2
 %
 is_triangle(N) ->
-  is_square(8*N+1).
+  is_square(8*N+1) andalso (round(math:sqrt(8*N+1))+1) rem 2 == 0.
+
+is_pentagonal(N) ->
+  is_square(24*N+1) andalso (round(math:sqrt(24*N+1))+1) rem 6 == 0.
+
+is_hexagonal(N) ->
+  is_square(8*N+1) andalso (round(math:sqrt(8*N+1))+1) rem 4 == 0.
 
 to_list_test() ->
   ?assertEqual([0], to_list(0)),
@@ -135,10 +145,46 @@ is_square_test() ->
 
 is_triangle_test() ->
   ?assert(is_triangle(1)),
-  ?assert(is_triangle(3)),
-  ?assert(is_triangle(6)),
-  ?assert(is_triangle(10)),
-  ?assert(is_triangle(55)),
   ?assertNot(is_triangle(2)),
+  ?assert(is_triangle(3)),
+  ?assertNot(is_triangle(4)),
+  ?assertNot(is_triangle(5)),
+  ?assert(is_triangle(6)),
+  ?assertNot(is_triangle(7)),
+  ?assertNot(is_triangle(8)),
+  ?assertNot(is_triangle(9)),
+  ?assert(is_triangle(10)),
   ?assertNot(is_triangle(16)),
+  ?assert(is_triangle(55)),
   ?assertNot(is_triangle(56)).
+
+is_pentagonal_test() ->
+  ?assert(is_pentagonal(1)),
+  ?assertNot(is_pentagonal(2)),
+  ?assertNot(is_pentagonal(3)),
+  ?assertNot(is_pentagonal(4)),
+  ?assert(is_pentagonal(5)),
+  ?assertNot(is_pentagonal(6)),
+  ?assertNot(is_pentagonal(7)),
+  ?assertNot(is_pentagonal(8)),
+  ?assertNot(is_pentagonal(11)),
+  ?assert(is_pentagonal(12)),
+  ?assertNot(is_pentagonal(13)),
+  ?assert(is_pentagonal(22)),
+  ?assert(is_pentagonal(35)).
+
+is_hexagonal_test() ->
+  ?assert(is_hexagonal(1)),
+  ?assertNot(is_hexagonal(2)),
+  ?assertNot(is_hexagonal(3)),
+  ?assertNot(is_hexagonal(4)),
+  ?assertNot(is_hexagonal(5)),
+  ?assert(is_hexagonal(6)),
+  ?assertNot(is_hexagonal(7)),
+  ?assertNot(is_hexagonal(8)),
+  ?assertNot(is_hexagonal(9)),
+  ?assertNot(is_hexagonal(14)),
+  ?assert(is_hexagonal(15)),
+  ?assertNot(is_hexagonal(16)),
+  ?assert(is_hexagonal(28)),
+  ?assert(is_hexagonal(45)).
