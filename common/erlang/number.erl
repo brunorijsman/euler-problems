@@ -7,6 +7,7 @@
          all_truncations_left/1,
          truncate_right/1,
          all_truncations_right/1,
+         is_square/1,
          is_triangle/1,
          is_pentagonal/1,
          is_hexagonal/1]).

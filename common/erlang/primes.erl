@@ -1,6 +1,6 @@
 -module(primes).
 
--export([compute_primes/1, is_prime/2, are_all_primes/2]).
+-export([compute_primes/1, is_prime/2, is_prime/1, are_all_primes/2]).
 
 -include_lib("eunit/include/eunit.hrl").
 
