@@ -12,7 +12,8 @@
          is_pentagonal/1,
          is_hexagonal/1,
          digit_sum/1,
-         int_pow/2]).
+         int_pow/2,
+         same_digits/2]).
 
 -include_lib("eunit/include/eunit.hrl").
 
@@ -96,6 +97,9 @@ int_pow(_A, B) when B == 0 ->
 
 int_pow(A, B) ->
   A * int_pow(A, B-1).
+
+same_digits(N1, N2) ->
+  permutations:is_permutation_of(to_list(N1), to_list(N2)).
 
 to_list_test() ->
   ?assertEqual([0], to_list(0)),
@@ -212,3 +216,12 @@ digit_sum_test() ->
 
 int_pow_test() ->
   ?assertEqual(8, int_pow(2, 3)).
+
+same_digits_test() ->
+  ?assert(same_digits(2345, 2345)),
+  ?assert(same_digits(2345, 3425)),
+  ?assert(same_digits(234234, 234432)),
+  ?assertNot(same_digits(123, 234)),
+  ?assertNot(same_digits(123, 12)),
+  ?assertNot(same_digits(123, 1234)),
+  ?assertNot(same_digits(122, 121)).

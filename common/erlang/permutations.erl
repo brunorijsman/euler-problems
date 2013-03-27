@@ -1,7 +1,8 @@
 -module(permutations).
 
 -export([fold/3,
-         all/1]).
+         all/1,
+         is_permutation_of/2]).
 
 -include_lib("eunit/include/eunit.hrl").
 
@@ -29,6 +30,16 @@ enlist(Permutation, List) ->
 
 all(List) ->
   fold(fun enlist/2, [], List).
+
+is_permutation_of(List1, List2) ->
+  lists:sort(List1) == lists:sort(List2).
+
+is_permutation_of_test() ->
+  ?assert(is_permutation_of([1, 2, 3, 4], [1, 2, 3, 4])),
+  ?assert(is_permutation_of([1, 2, 3, 4], [4, 2, 1, 3])),
+  ?assert(is_permutation_of([1], [1])),
+  ?assertNot(is_permutation_of([1, 2, 3, 4], [4, 2, 5, 3])),
+  ?assertNot(is_permutation_of([1, 2, 3, 4], [4, 2, 3])).
 
 
 
