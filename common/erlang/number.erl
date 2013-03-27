@@ -10,7 +10,9 @@
          is_square/1,
          is_triangle/1,
          is_pentagonal/1,
-         is_hexagonal/1]).
+         is_hexagonal/1,
+         digit_sum/1,
+         int_pow/2]).
 
 -include_lib("eunit/include/eunit.hrl").
 
@@ -82,6 +84,18 @@ is_pentagonal(N) ->
 
 is_hexagonal(N) ->
   is_square(8*N+1) andalso (round(math:sqrt(8*N+1))+1) rem 4 == 0.
+
+digit_sum(0) ->
+  0;
+
+digit_sum(N) ->
+  (N rem 10) + digit_sum(N div 10).
+
+int_pow(_A, B) when B == 0 ->
+  1;
+
+int_pow(A, B) ->
+  A * int_pow(A, B-1).
 
 to_list_test() ->
   ?assertEqual([0], to_list(0)),
@@ -189,3 +203,12 @@ is_hexagonal_test() ->
   ?assertNot(is_hexagonal(16)),
   ?assert(is_hexagonal(28)),
   ?assert(is_hexagonal(45)).
+
+digit_sum_test() ->
+  ?assertEqual(0, digit_sum(0)),
+  ?assertEqual(1, digit_sum(1)),
+  ?assertEqual(3, digit_sum(12)),
+  ?assertEqual(12, digit_sum(1230123)).
+
+int_pow_test() ->
+  ?assertEqual(8, int_pow(2, 3)).
