@@ -13,7 +13,8 @@
          is_hexagonal/1,
          digit_sum/1,
          int_pow/2,
-         same_digits/2]).
+         same_digits/2,
+         all_permutations/1]).
 
 -include_lib("eunit/include/eunit.hrl").
 
@@ -100,6 +101,18 @@ int_pow(A, B) ->
 
 same_digits(N1, N2) ->
   permutations:is_permutation_of(to_list(N1), to_list(N2)).
+
+non_zero([0|_]) -> 
+  false;
+
+non_zero(_) -> 
+  true.
+
+all_permutations(N) ->
+  L1 = permutations:all(number:to_list(N)),
+  L2 = lists:filter(fun non_zero/1, L1),
+  L3 = lists:map(fun number:from_list/1, L2),
+  lists:usort(L3). 
 
 to_list_test() ->
   ?assertEqual([0], to_list(0)),
@@ -225,3 +238,8 @@ same_digits_test() ->
   ?assertNot(same_digits(123, 12)),
   ?assertNot(same_digits(123, 1234)),
   ?assertNot(same_digits(122, 121)).
+
+all_permutations_test() ->
+  ?assertEqual([123,132,213,231,312,321], lists:sort(number:all_permutations(123))),
+  ?assertEqual([111], lists:sort(number:all_permutations(111))),
+  ?assertEqual([133, 313, 331], lists:sort(number:all_permutations(133))).
