@@ -14,7 +14,8 @@
          digit_sum/1,
          int_pow/2,
          same_digits/2,
-         all_permutations/1]).
+         all_permutations/1,
+         nr_digits/1]).
 
 -include_lib("eunit/include/eunit.hrl").
 
@@ -107,6 +108,19 @@ non_zero([0|_]) ->
 
 non_zero(_) -> 
   true.
+
+nr_digits(N) ->
+  if
+    N < 0  -> nr_digits_recurse(-N);
+    N == 0 -> 1;
+    N > 0  -> nr_digits_recurse(N)
+  end.
+
+nr_digits_recurse(N) when N == 0 ->
+  0;
+
+nr_digits_recurse(N) ->
+  1 + nr_digits_recurse(N div 10).
 
 all_permutations(N) ->
   L1 = permutations:all(number:to_list(N)),
@@ -243,3 +257,11 @@ all_permutations_test() ->
   ?assertEqual([123,132,213,231,312,321], lists:sort(number:all_permutations(123))),
   ?assertEqual([111], lists:sort(number:all_permutations(111))),
   ?assertEqual([133, 313, 331], lists:sort(number:all_permutations(133))).
+
+nr_digits_test() ->
+  ?assertEqual(3, nr_digits(554)),
+  ?assertEqual(2, nr_digits(99)),
+  ?assertEqual(1, nr_digits(7)),
+  ?assertEqual(1, nr_digits(0)),
+  ?assertEqual(1, nr_digits(-9)),
+  ?assertEqual(2, nr_digits(-13)).
