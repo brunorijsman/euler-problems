@@ -2,6 +2,8 @@
 
 -export([solve/0]).
 
+-include_lib("eunit/include/eunit.hrl").
+
 nr_to_list_rev(N) when N < 10 ->
     [N];
 
@@ -41,4 +43,11 @@ consider(K, Fib, PrevFib) ->
 
 solve() ->
     consider(2, 1, 1).
+
+is_solution_test() ->
+    ?assert(is_solution(1234657891111987654231)),
+    ?assertNot(is_solution(1234567881111987654321)),
+    ?assertNot(is_solution(1234567891111987654322)),
+    ?assertNot(is_solution(12345678)).
+    
 

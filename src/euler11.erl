@@ -1,11 +1,13 @@
 %% Project Euler, problem 11
 %% 
 %% What is the greatest product of four adjacent numbers in any direction (up, down, left, right, or diagonally) 
-%% in the 20×20 grid given below?
+%% in the 20x20 grid given below?
 
 -module(euler11).
 
 -export([solve/0]).
+
+-include_lib("eunit/include/eunit.hrl").
 
 -define(PRODUCT_SIZE, 4).
 -define(GRID_SIZE, 20).
@@ -70,3 +72,6 @@ highest_product() ->
 
 solve() ->
     highest_product().
+
+solve_test() ->
+    ?assertEqual(70600674, solve()).

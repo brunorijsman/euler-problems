@@ -4,7 +4,9 @@
 
 -module(euler14).
 
--export([solve/0]).
+-export([solve/0, solve/1]).
+
+-include_lib("eunit/include/eunit.hrl").
 
 next_in_series(Nr) ->
     if
@@ -44,3 +46,6 @@ solve() ->
 
 solve(N) ->
     longest_series(N).
+
+solve_test() ->
+    ?assertEqual(871, solve(1000)).

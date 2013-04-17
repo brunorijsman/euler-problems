@@ -4,7 +4,9 @@
 
 -module(euler15a).
 
--export([solve/0]).
+-export([solve/0, solve/1]).
+
+-include_lib("eunit/include/eunit.hrl").
 
 routes_in_grid(X, Y) ->
     if

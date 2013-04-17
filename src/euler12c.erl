@@ -9,6 +9,8 @@
 
 -export([solve/0, solve/1]).
 
+-include_lib("eunit/include/eunit.hrl").
+
 prime_factors(Number) ->
     prime_factors(Number, 2).
 
@@ -61,3 +63,6 @@ solve(Try, Step, WantedFactors) ->
         false ->
             solve(Try + Step, Step + 1, WantedFactors)
     end.
+
+solve_test() ->
+    ?assertEqual(120, solve(10)).

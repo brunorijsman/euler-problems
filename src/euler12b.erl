@@ -6,6 +6,8 @@
 
 -export([solve/0, solve/1]).
 
+-include_lib("eunit/include/eunit.hrl").
+
 %% Try only the divisors between 1 and sqrt(Number).
 %%
 count_divisors(Number) ->
@@ -50,3 +52,6 @@ solve(Try, Step, BestSoFar, WantedFactors) ->
         false ->
             solve(Try + Step, Step + 1, NewBestSoFar, WantedFactors)
     end.
+
+solve_test() ->
+    ?assertEqual(120, solve(10)).

@@ -9,7 +9,9 @@
 
 -module(euler10).
 
--export([solve/0]).
+-export([solve/0, solve/1]).
+
+-include_lib("eunit/include/eunit.hrl").
 
 init_sieve_array(N) ->
     Size = (N + 1) div 2,                                      % only store odd numbers (0->1, 1->3, 2->5, etc.)
@@ -79,3 +81,5 @@ solve(N) -> sum(sieve(N)).
 
 solve() -> solve(2000000).
 
+solve_test() ->
+    ?assertEqual(1060, solve(100)).
