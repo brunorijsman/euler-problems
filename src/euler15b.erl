@@ -6,6 +6,8 @@
 
 -export([solve/0]).
 
+-include_lib("eunit/include/eunit.hrl").
+
 routes_in_grid(X, Y) ->
     Solutions = dict:new(),
     {Routes, _} = routes_in_grid(X, Y, Solutions),
@@ -34,3 +36,6 @@ solve() ->
 
 solve(N) ->
     routes_in_grid(N, N).
+
+solve_test() ->
+    ?assertEqual(20, solve(3)).

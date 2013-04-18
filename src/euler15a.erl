@@ -21,3 +21,6 @@ solve() ->
 
 solve(N) ->
     routes_in_grid(N, N).
+
+solve_test() ->
+    ?assertEqual(20, solve(3)).
