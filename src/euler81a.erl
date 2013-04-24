@@ -10,7 +10,7 @@ solve() ->
 
 solve(Square, Size) ->
     Costs = dict:new(),
-    NewCosts = lists:foldr(fun(Y, C) -> solve_row(Square, C, Size, Y) end, Costs, lists:seq(1, Size)),x
+    NewCosts = lists:foldr(fun(Y, C) -> solve_row(Square, C, Size, Y) end, Costs, lists:seq(1, Size)),
     dict:fetch({1, 1}, NewCosts).
     
 solve_row(Square, Costs, Size, Y) ->

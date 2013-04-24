@@ -10,8 +10,29 @@ get_test_triangle() ->
      [2, 4, 6],
      [8, 5, 9, 3]].
 
+read_triangle(FileName, NrRows) ->
+    {ok, Fd} = file:open(FileName, [read]),
+    Triangle = read_rows(Fd, 1, NrRows, []),
+    ok = file:close(Fd),
+    lists:reverse(Triangle).
+
+read_rows(_Fd, RowNr, NrRows, Triangle) when RowNr > NrRows ->
+    Triangle;
+
+read_rows(Fd, RowNr, NrRows, Triangle) ->
+    Row = read_one_row(Fd, RowNr, []),
+    read_rows(Fd, RowNr + 1, NrRows, [Row | Triangle]).
+
+read_one_row(_Fd, MoreNrs, RowSoFar) when MoreNrs == 0 ->
+    lists:reverse(RowSoFar);
+
+read_one_row(Fd, MoreNrs, RowSoFar) ->
+    {ok, [Nr]} = io:fread(Fd, "", "~d"),
+    read_one_row(Fd, MoreNrs - 1, [Nr | RowSoFar]).
+
 solve() ->
-    solve(get_test_triangle()).
+    Triangle = read_triangle("../input/euler67.txt", 100),
+    solve(Triangle).
 
 solve([LastRow]) ->
     lists:max(LastRow);
