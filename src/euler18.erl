@@ -6,6 +6,8 @@
 
 -export([solve/0]).
 
+-include_lib("eunit/include/eunit.hrl").
+
 -define(TRIANGLE, [[04, 62, 98, 27, 23, 09, 70, 98, 73, 93, 38, 53, 60, 04, 23],
                    [63, 66, 04, 68, 89, 53, 67, 30, 73, 16, 69, 87, 40, 31],
                      [91, 71, 52, 38, 17, 14, 91, 43, 58, 50, 27, 29, 48],
@@ -43,3 +45,6 @@ collapse_rows([A, B | Tail1], [C | Tail2]) ->
 
 solve() ->
     collapse_triangle(?TRIANGLE).
+
+solve_test() ->
+    ?assertEqual(1074, solve()).

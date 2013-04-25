@@ -74,12 +74,12 @@ is_square(N) ->
     Root = trunc(math:sqrt(N)),
     Root * Root == N.
 
-                                                % Is N a triangle number?
-                                                % N is a triangle number if N = K*(K+1)/2 for some integer K.
-                                                % Given an N and solving for K you get K = (sqrt(8N+1)-1)/2.
-                                                % N is a triangle number if K is integer which is true if 8N+1 is square
-                                                % andalso sqrt(8N+1)-1 is a multiple of 2
-                                                %
+%% Is N a triangle number?
+%% N is a triangle number if N = K*(K+1)/2 for some integer K.
+%% Given an N and solving for K you get K = (sqrt(8N+1)-1)/2.
+%% N is a triangle number if K is integer which is true if 8N+1 is square
+%% andalso sqrt(8N+1)-1 is a multiple of 2
+%%
 is_triangle(N) ->
     is_square(8*N+1) andalso (round(math:sqrt(8*N+1))+1) rem 2 == 0.
 
@@ -260,7 +260,9 @@ same_digits_test() ->
 all_permutations_test() ->
     ?assertEqual([123,132,213,231,312,321], lists:sort(number:all_permutations(123))),
     ?assertEqual([111], lists:sort(number:all_permutations(111))),
-    ?assertEqual([133, 313, 331], lists:sort(number:all_permutations(133))).
+    ?assertEqual([133, 313, 331], lists:sort(number:all_permutations(133))),
+    ?assertEqual([1001, 1010, 1100], lists:sort(number:all_permutations(1001))).
+    
 
 nr_digits_test() ->
     ?assertEqual(3, nr_digits(554)),

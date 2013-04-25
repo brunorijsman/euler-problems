@@ -1,24 +1,32 @@
 -module(primes).
 
--export([compute_primes/1, 
+-export([compute_primes/1,
+         primes_to_list/1,
          is_prime/2, 
          foldl/3, 
          foldl/4, 
          is_prime/1, 
-         are_all_primes/2]).
+         are_all_primes/2,
+         new_factorizer/1,
+         factorize/2]).
 
 -include_lib("eunit/include/eunit.hrl").
 
-                                                % Compute all primes up to and including Max using the Sieve of Eratosthenes
-                                                %
+%% Compute all primes up to and including Max using the Sieve of Eratosthenes
+%%
 compute_primes(Max) ->
     Array = init_sieve_array(Max),
     MaxTry = trunc(math:sqrt(Max)),
     Try = 3,                                    % start with 3 as the first real prime
     sieve(Max, Array, MaxTry, Try).
 
-                                                % Check whether Nr is a prime, using the precomputed set of Primes
-                                                %
+%% Convert an opaque 'Primes' object to an ordered list of primes
+%%
+primes_to_list(Primes) ->
+    lists:reverse(foldl(fun(P, L) -> [P | L] end, [], Primes)).
+
+%% Check whether Nr is a prime, using the precomputed set of Primes
+%%
 is_prime(Primes, Nr) ->
     case Nr of
         2 -> true;
@@ -28,8 +36,8 @@ is_prime(Primes, Nr) ->
              end
     end.
 
-                                                % Apply an accumulator function to each prime in a set of pre-computed primes
-                                                %
+%% Apply an accumulator function to each prime in a set of pre-computed primes
+%%
 foldl(Fun, Acc0, Primes) ->
     foldl(Fun, Acc0, Primes, 2).
 
@@ -43,8 +51,8 @@ foldl(Fun, Acc0, Primes, StartPrime) ->
         true  -> Acc0
     end.
 
-                                                % Check whether Nr is prime, using the trial division method
-                                                %
+%% Check whether Nr is prime, using the trial division method
+%%
 is_prime(Nr) ->
     if
         Nr == 1                       -> false;
@@ -113,6 +121,42 @@ remove_multiples_of_prime(Max, Array, Prime, Multiple) ->
             NewArray = set_value_in_sieve_array(Multiple, false, Array),
             remove_multiples_of_prime(Max, NewArray, Prime, Multiple + 2*Prime)
     end.
+
+-record(factorizer, {max, primes_list}).
+
+%% Instantiate a new 'factorizer' which can factor numbers up to Max
+%%
+new_factorizer(Max) ->
+    Primes = compute_primes(trunc(math:sqrt(Max)) + 1),
+    #factorizer{max = Max, primes_list = primes_to_list(Primes)}.
+
+%% Factor number 'Nr' into its prime factors using trial division by
+%% precomputed primes.
+%%
+factorize(Nr, #factorizer{max = Max}) when Nr > Max ->
+    erlang:error(nr_too_big_for_factorizer);
+
+factorize(1, _) ->
+    [1];
+
+factorize(Nr, #factorizer{primes_list = Primes}) ->
+    lists:reverse(factorize2(Nr, Primes, [])).
+
+factorize2(1, _Primes, Factors) ->
+    Factors;
+
+factorize2(Nr, [], Factors) ->
+    [Nr | Factors];
+
+factorize2(Nr, AllPrimes = [Prime | MorePrimes], Factors) ->
+    case Nr rem Prime of
+        0 -> factorize2(Nr div Prime, AllPrimes, [Prime | Factors]);
+        _ -> factorize2(Nr, MorePrimes, Factors)
+    end.
+
+primes_to_list_test() ->
+    ?assertEqual([2, 3, 5, 7], primes_to_list(compute_primes(10))),
+    ?assertEqual([2, 3, 5, 7, 11, 13, 17], primes_to_list(compute_primes(17))).
 
 is_prime_2_test() ->
     Primes = compute_primes(20),
@@ -191,3 +235,20 @@ performance_test() ->
     Primes = ?debugTime("Compute 100,000 primes", compute_primes(100000)),
     ?debugTime("Check 100,000 primes (pre-computed)", check_all_primes_precomputed(Primes, 100000)),
     ?debugTime("Check 100,000 primes (by trial division)", check_all_primes_trial(100000)).
+
+new_factorizer_test() ->
+    _Factorizer = new_factorizer(100).
+
+factorize_test() ->
+    Factorizer100 = new_factorizer(100),
+    ?assertError(nr_too_big_for_factorizer, factorize(101, Factorizer100)),
+    ?assertEqual([1], factorize(1, Factorizer100)),
+    ?assertEqual([2], factorize(2, Factorizer100)),
+    ?assertEqual([3], factorize(3, Factorizer100)),
+    ?assertEqual([17], factorize(17, Factorizer100)),
+    ?assertEqual([2, 3], factorize(6, Factorizer100)),
+    ?assertEqual([2, 2, 3], factorize(12, Factorizer100)),
+    ?assertEqual([2, 3, 3], factorize(18, Factorizer100)),
+    ?assertEqual([2, 2, 5, 5], factorize(100, Factorizer100)).
+    
+

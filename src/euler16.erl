@@ -6,6 +6,8 @@
 
 -export([solve/0]).
 
+-include_lib("eunit/include/eunit.hrl").
+
 power_of_2(N) ->
     1 bsl N.
 
@@ -22,3 +24,6 @@ solve() ->
 
 solve(N) ->
     digits_sum(power_of_2(N)).
+
+solve_test() ->
+    ?assertEqual(1366, solve()).

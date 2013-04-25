@@ -4,7 +4,9 @@
 
 -module(euler17).
 
--export([solve/0, solve/1, number_to_string/1, count_letters/1, count_letters_in_number/1]).
+-export([solve/0]).
+
+-include_lib("eunit/include/eunit.hrl").
 
 -define(SPACE, $\ ).
 
@@ -68,5 +70,9 @@ solve() ->
 
 solve(0) ->
     0;
+
 solve(N) ->
     count_letters_in_number(N) + solve(N-1).
+
+solve_test() ->
+    ?assertEqual(21124, solve()).

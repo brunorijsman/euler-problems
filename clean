@@ -1,0 +1,2 @@
+rm -f src/*.beam
+rm -f src/*~
