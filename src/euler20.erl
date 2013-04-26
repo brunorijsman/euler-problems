@@ -6,6 +6,8 @@
 
 -export([solve/0]).
 
+-include_lib("eunit/include/eunit.hrl").
+
 fact(0) -> 1;
 fact(N) -> N * fact(N-1).
 
@@ -17,3 +19,6 @@ solve() ->
 
 solve(N) ->
     sum_of_digits(fact(N)).
+
+solve_test() ->
+    ?assertEqual(648, solve()).

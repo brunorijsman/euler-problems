@@ -6,6 +6,8 @@
 
 -export([solve/0]).
 
+-include_lib("eunit/include/eunit.hrl").
+
 sum_of_divisors(N) -> 
     sum_of_divisors(N, 1, N div 2, 0).
 
@@ -43,3 +45,6 @@ solve() ->
 
 solve(N) -> 
     sum_of_amicable_numbers(N).
+
+solve_test() ->
+    ?assertEqual(504, solve(1000)).

@@ -3,7 +3,8 @@
 -export([rotate_left/1,
          rotate_right/1,
          all_rotations/1,
-         uniq/1]).
+         uniq/1,
+         find_solution/2]).
 
 -include_lib("eunit/include/eunit.hrl").
 
@@ -33,6 +34,8 @@ all_rotations(OriginalList, List, Rotations) ->
         _            -> all_rotations(OriginalList, NextRotation, NewRotations)
     end.
 
+%% Given a sorted list, remove the dupplicates
+%%
 uniq(List) ->
     lists:reverse(uniq2(List, [])).
 
@@ -47,6 +50,26 @@ uniq2([E1, E1 | Rest], U) ->
 
 uniq2([E | Rest], U) ->
     uniq2(Rest, [E | U]).
+
+%% Apply function Fun to each element in list List, starting at the first element.
+%%
+%% Fun(Element) must return either false or {true, Solution}.
+%%
+%% find_solution returns:
+%%
+%% 1. {true, Solution} for the first value of Element for which Fun(Element)
+%%    returns {true, Solution}, or
+%%x
+%% 2. false is Fun(Element) does not return {true, Solution} for any element.
+%%
+find_solution(_Fun, []) ->
+    false;
+
+find_solution(Fun, [Element | Rest]) ->
+    case Fun(Element) of
+        {true, Solution} -> {true, Solution};
+        false            -> find_solution(Fun, Rest)
+    end.
 
 rotate_left_test() ->
     ?assertEqual([], rotate_left([])),
@@ -84,3 +107,18 @@ uniq_test() ->
     ?assertEqual([1, 2, 3, 4, 5], uniq([1, 2, 2, 2, 3, 3, 3, 4, 5])),
     ?assertEqual([1, 2, 3, 4, 5], uniq([1, 2, 3, 4, 5, 5, 5])).
     
+triple_if_even(N) ->
+    case N rem 2 of
+        0 -> {true, 3 * N}; 
+        _ -> false
+    end.
+
+find_solution_test() ->
+    ?assertEqual({true, 6}, find_solution(fun triple_if_even/1, [1, 3, 2, 4, 5])),
+    ?assertEqual({true, 6}, find_solution(fun triple_if_even/1, [2, 3, 4, 6, 7])),
+    ?assertEqual({true, 12}, find_solution(fun triple_if_even/1, [1, 3, 4])),
+    ?assertEqual({true, 18}, find_solution(fun triple_if_even/1, [6])),
+    ?assertEqual(false, find_solution(fun triple_if_even/1, [])),
+    ?assertEqual(false, find_solution(fun triple_if_even/1, [1, 3, 5])).
+    
+                     

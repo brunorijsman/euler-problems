@@ -6,6 +6,8 @@
 
 -export([solve/0]).
 
+-include_lib("eunit/include/eunit.hrl").
+
 is_leap_year(Year) ->
     if
         Year rem 400 == 0 ->
@@ -79,3 +81,6 @@ solve(Date = {_Day, _Month, Year, _Dow}, Count) ->
         true ->
             Count
     end.
+
+solve_test() ->
+    ?assertEqual(171, solve()).
