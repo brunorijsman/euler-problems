@@ -20,6 +20,8 @@
 
 -export([solve/0, divide/2]).
 
+-include_lib("eunit/include/eunit.hrl").
+
 recurrence(_Divident, []) ->
     [];
 
@@ -29,18 +31,6 @@ recurrence(Divident, Result) ->
         Divident -> Result;
         _        -> recurrence(Divident, OldResult)
     end.
-
-quotient({_Divident, Quotient}) -> $0 + Quotient.
-
-quotients(Result) -> lists:map(fun quotient/1, Result).
-
-print_result(Divident, Divisor, Result, Recurrence) ->
-    FixedLength = length(Result) - length(Recurrence),
-    Fixed = lists:sublist(Result, FixedLength),
-    [ _ | Rest ] = Fixed,
-    RestStr = quotients(Rest),
-    RecurrenceStr = quotients(Recurrence),
-    io:format("~p / ~p = 0.~s(~s)~n", [Divident, Divisor, RestStr, RecurrenceStr]).
 
 divide(Divident, Divisor, Result) ->
     case recurrence(Divident, Result) of
@@ -54,8 +44,7 @@ divide(Divident, Divisor, Result) ->
     end.
 
 divide(Divident, Divisor) ->
-    {Result, Recurrence} = divide(Divident, Divisor, []),
-    print_result(Divident, Divisor, Result, Recurrence),
+    {Result, _Recurrence} = divide(Divident, Divisor, []),
     length(Result).
 
 reciprocal(Number) ->
@@ -73,3 +62,6 @@ solve(CurrentNumber, MaxNumber, BestNumber, BestLength) ->
 
 solve() ->
     solve(1, 1000, 0, 0).
+
+solve_test() ->
+    ?assertEqual(97, solve(1, 100, 0, 0)).

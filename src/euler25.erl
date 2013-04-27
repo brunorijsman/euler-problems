@@ -6,6 +6,8 @@
 
 -export([solve/0]).
 
+-include_lib("eunit/include/eunit.hrl").
+
 nr_digits(N) ->
     if 
         N < 10 ->
@@ -31,3 +33,6 @@ solve() ->
 
 solve(WantedDigits) ->
     fibonacci(WantedDigits).
+
+solve_test() ->
+    ?assertEqual(476, solve(100)).

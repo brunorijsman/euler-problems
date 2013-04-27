@@ -6,6 +6,8 @@
 
 -export([solve/0]).
 
+-include_lib("eunit/include/eunit.hrl").
+
 sum_of_divisors(N) -> 
     sum_of_divisors(N, 1, N div 2, 0).
 
@@ -42,4 +44,11 @@ holes_in_list(_List) ->
     [].
 
 solve() -> 
-    lists:sum(all_non_pairs_up_to(28123)).
+    solve(28123).
+
+solve(Max) ->
+    lists:sum(all_non_pairs_up_to(Max)).
+
+solve_test() ->
+    ?assertEqual(240492, solve(1000)).
+    

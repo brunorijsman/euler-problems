@@ -10,7 +10,15 @@
 
 -export([solve/0]).
 
+-include_lib("eunit/include/eunit.hrl").
+
 permutations([]) -> [[]];
 permutations(L)  -> [[H|T] || H <- L, T <- permutations(L--[H])]. 
 
-solve() -> lists:nth(1000000, permutations("0123456789")).
+solve() -> solve(1000000, "0123456789").
+
+solve(N, List) -> lists:nth(N, permutations(List)).
+
+solve_test() ->
+    ?assertEqual("51342", solve(100, "12345")).
+    
