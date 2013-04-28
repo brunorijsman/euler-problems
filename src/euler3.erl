@@ -8,6 +8,8 @@
 
 -export([solve/0, solve/1]).
 
+-include_lib("eunit/include/eunit.hrl").
+
 solve() ->
     solve(600851475143).
 
@@ -26,3 +28,6 @@ solve(N, Try) ->
                     solve(N, Try+1)
             end
     end. 
+
+solve_test() ->
+    ?assertEqual(6857, solve()).

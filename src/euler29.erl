@@ -2,6 +2,8 @@
 
 -export([solve/0, pow/2]).
 
+-include_lib("eunit/include/eunit.hrl").
+
 pow(_A, 0) -> 1;
 pow(A, B)  -> A * pow(A, B-1). 
 
@@ -20,6 +22,9 @@ range_fold(Fun, Acc0, Start, End) ->
 solve() ->
     Terms = range_fold(fun a_candidate/2, sets:new(), 2, 100),
     sets:size(Terms).
+
+solve_test() ->
+    ?assertEqual(9183, solve()).
 
 
 
