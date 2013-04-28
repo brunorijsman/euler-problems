@@ -2,6 +2,8 @@
 
 -export([solve/0, solve/1]).
 
+-include_lib("eunit/include/eunit.hrl").
+
 solve() ->
     solve(4000000).
 
@@ -17,3 +19,6 @@ solve(Max, Current, Prev, Total) ->
         true ->
             solve(Max, Current+Prev, Current, Total)
     end.
+
+solve_test() ->
+    ?assertEqual(4613732, solve()).

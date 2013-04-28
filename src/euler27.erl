@@ -2,6 +2,8 @@
 
 -export([solve/0, is_prime/1]).
 
+-include_lib("eunit/include/eunit.hrl").
+
 is_prime(N) when N < 3 ->
     false;
 
@@ -39,17 +41,21 @@ a_b_candidate(A, B, Acc = {BestN, _BestAB}) ->
         false -> Acc
     end.
 
-b_candidate(B, Acc0) ->
+b_candidate(B, Acc0, Max) ->
     case is_prime(B) of
-        true  -> range_fold(fun(A, Acc) -> a_b_candidate(A, B, Acc) end, Acc0, -B + 1, 999);
+        true  -> range_fold(fun(A, Acc) -> a_b_candidate(A, B, Acc) end, Acc0, -B + 1, Max);
         false -> Acc0
     end.
 
-solve() ->
-    {_, Product} = range_fold(fun b_candidate/2, {0, 0}, 2, 999),
+solve(Max) ->
+    {_, Product} = range_fold(fun(B, Acc) -> b_candidate(B, Acc, Max) end, {0, 0}, 2, Max),
     Product.
 
+solve() ->
+    solve(999).
+
+solve_test() ->
+    ?assertEqual(-1455, solve(99)).
 
 
-             
-
+        
