@@ -10,28 +10,26 @@
 
 -module(euler4).
 
--export([solve/0, reverse/1]).
+-export([solve/0]).
 
-reverse(N) -> reverse(N, 0).
+-include_lib("eunit/include/eunit.hrl").
 
-reverse(0, Reversed) -> Reversed;
-reverse(N, Reversed) -> reverse(N div 10, Reversed * 10 + N rem 10).
+solve() -> solve(100, 100, 0, 999).
 
-is_palindrome(N) -> N == reverse(N).
-
-solve() -> solve(100, 100, 0).
-
-solve(N1, N2, BestSoFar) ->
+solve(N1, N2, BestSoFar, Max) ->
     Product = N1 * N2,
-    case (Product > BestSoFar) and is_palindrome(Product) of
-        true -> NewBestSoFar = Product;
-        false -> NewBestSoFar = BestSoFar
+    NewBestSoFar = case (Product > BestSoFar) and number:is_palindrome(Product) of
+        true  -> Product;
+        false -> BestSoFar
     end,
     if
-        N1 < 999 -> solve(N1+1, N2, NewBestSoFar);
-        N1 == 999 ->
+        N1 < Max -> solve(N1+1, N2, NewBestSoFar, Max);
+        N1 == Max ->
             if
-                N2 < 999 -> solve(100, N2+1, NewBestSoFar);
-                N2 == 999 -> NewBestSoFar 
+                N2 < Max -> solve(100, N2+1, NewBestSoFar, Max);
+                N2 == Max -> NewBestSoFar 
             end
     end.
+
+solve_test() ->
+    ?assertEqual(36863, solve(100, 100, 0, 199)).

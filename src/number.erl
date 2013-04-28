@@ -16,7 +16,9 @@
          same_digits/2,
          all_permutations/1,
          nr_digits/1,
-         concat/2]).
+         concat/2,
+         reverse/1,
+         is_palindrome/1]).
 
 -include_lib("eunit/include/eunit.hrl").
 
@@ -131,6 +133,13 @@ all_permutations(N) ->
     L2 = lists:filter(fun non_zero/1, L1),
     L3 = lists:map(fun number:from_list/1, L2),
     lists:usort(L3). 
+
+reverse(N) -> reverse(N, 0).
+
+reverse(0, Reversed) -> Reversed;
+reverse(N, Reversed) -> reverse(N div 10, Reversed * 10 + N rem 10).
+
+is_palindrome(N) -> N == reverse(N).
 
 to_list_test() ->
     ?assertEqual([0], to_list(0)),
@@ -277,3 +286,12 @@ concat_test() ->
     ?assertEqual(123, concat(1, 23)),
     ?assertEqual(123, concat(12, 3)),
     ?assertEqual(99099, concat(990, 099)).
+
+reverse_test() ->
+    ?assertEqual(4321, reverse(1234)),
+    ?assertEqual(1, reverse(1)).
+
+is_palindrome_test() ->
+    ?assert(is_palindrome(1)),
+    ?assert(is_palindrome(12321)),
+    ?assertNot(is_palindrome(12341)).

@@ -14,6 +14,8 @@
 
 -module(euler6).
 
+-include_lib("eunit/include/eunit.hrl").
+
 -export([solve/0]).
 
 sum_of_squares(0) -> 0;
@@ -26,3 +28,6 @@ square_of_sum(N) ->
 solve() -> solve(100).
 
 solve(N) -> square_of_sum(N) - sum_of_squares(N).
+
+solve_test() ->
+    ?assertEqual(25164150, solve()).
